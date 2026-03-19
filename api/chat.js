@@ -1,12 +1,4 @@
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '1mb',
-    },
-  },
-};
- 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -18,11 +10,11 @@ export default async function handler(req, res) {
   if (!apiKey) return res.status(500).json({ error: 'API key not configured' });
  
   try {
-    const system = req.body?.system || 'Eres un asistente de Pitch to Campus que ayuda a jovenes a conseguir becas de futbol en USA. Responde en espanol.';
-    const messages = req.body?.messages;
+    const system = req.body && req.body.system ? req.body.system : 'Eres un asistente de Pitch to Campus que ayuda a jovenes a conseguir becas de futbol en USA. Responde en espanol.';
+    const messages = req.body && req.body.messages ? req.body.messages : [];
  
-    if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      return res.status(400).json({ error: 'Messages array is required' });
+    if (!messages.length) {
+      return res.status(400).json({ error: 'No messages' });
     }
  
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -35,8 +27,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 400,
-        system,
-        messages
+        system: system,
+        messages: messages
       })
     });
  
@@ -45,5 +37,4 @@ export default async function handler(req, res) {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-}
- 
+};
