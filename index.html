@@ -480,7 +480,7 @@ function cs(t){
   hist.push({role:'user',content:msg});
   st();busy=true;
   document.getElementById('csnd').disabled=true;
-  fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:SYS,messages:hist})})
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,system:SYS,messages:hist})})
   .then(function(r){return r.json();})
   .then(function(d){
     ht();busy=false;document.getElementById('csnd').disabled=false;
