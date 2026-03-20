@@ -10,7 +10,10 @@ export default async function handler(req, res) {
   if (!apiKey) return res.status(500).json({ error: 'API key not configured' });
 
   try {
-    const { system, messages } = req.body;
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const system = body.system || '';
+    const messages = body.messages || [];
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -21,10 +24,11 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 400,
-        system: system || '',
-        messages: messages || []
+        system: system,
+        messages: messages
       })
     });
+
     const data = await response.json();
     return res.status(response.status).json(data);
   } catch (err) {
