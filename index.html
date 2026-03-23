@@ -4,7 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pitch to Campus — Del campo a la universidad americana</title>
-<style>
+/* Modal highlight */
+.hl-modal{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);pointer-events:none;transition:background .3s;}
+.hl-modal.open{background:rgba(0,0,0,.88);pointer-events:all;}
+.hl-box{position:relative;width:min(760px,94vw);aspect-ratio:16/9;transform:scale(.9);opacity:0;transition:transform .3s,opacity .3s;}
+.hl-modal.open .hl-box{transform:scale(1);opacity:1;}
+.hl-box iframe{width:100%;height:100%;border:none;border-radius:12px;}
+.hl-close{position:absolute;top:-44px;right:0;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;opacity:.75;transition:.2s;}
+.hl-close:hover{opacity:1;}
+.btn-hl{display:inline-flex;align-items:center;gap:7px;background:rgba(29,185,84,.12);border:1px solid rgba(29,185,84,.4);color:#c8f564;font-size:12px;font-weight:700;padding:7px 14px;border-radius:8px;cursor:pointer;font-family:inherit;transition:.2s;margin-top:11px;}
+.btn-hl:hover{background:rgba(29,185,84,.22);border-color:#1DB954;}
+.hwd-extra{font-size:11px;color:#3a5e41;line-height:1.6;font-weight:300;margin-top:7px;font-style:italic;}<style>
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:#080d09;color:#eef5ef;font-family:'Segoe UI',Arial,sans-serif;overflow-x:hidden;}
@@ -257,7 +267,7 @@ footer{background:#0a0f0a;border-top:1px solid rgba(29,185,84,.1);padding:48px 4
     <div class="stitle tr" id="howt">ASÍ FUNCIONA <span>PITCH TO CAMPUS</span></div>
     <p class="ssub tr" id="hows">Todo lo que necesitas para conseguir tu beca, en una sola plataforma.</p>
     <div class="hwg">
-      <div class="hws"><div class="hwn">01</div><div class="hwi">🎬</div><div class="hwt tr" id="hw1">PREPARA TU HIGHLIGHT</div><div class="hwd tr" id="hd1">La IA te guía para crear un vídeo que llame la atención de cualquier coach americano.</div></div>
+    <div class="hws"><div class="hwn">01</div><div class="hwi">🎬</div><div class="hwt tr" id="hw1">PREPARA TU HIGHLIGHT</div><div class="hwd tr" id="hd1">3-5 minutos máximo. Los primeros 30 segundos son clave — pon tus mejores jugadas ahí. Sin música lenta, directo a la acción.</div><div class="hwd-extra">Formato horizontal, buena calidad y que se vea el número en la camiseta.</div><button class="btn-hl" onclick="openHL()">▶ Ver mi highlight real</button></div>
       <div class="hws"><div class="hwn">02</div><div class="hwi">🏫</div><div class="hwt tr" id="hw2">ELIGE UNIVERSIDAD</div><div class="hwd tr" id="hd2">Filtra por presupuesto, nivel deportivo, carrera y clima. Más de 50 universidades.</div></div>
       <div class="hws"><div class="hwn">03</div><div class="hwi">📧</div><div class="hwt tr" id="hw3">CONTACTA COACHES</div><div class="hwd tr" id="hd3">Genera emails personalizados en inglés perfecto para cada coach con un clic.</div></div>
       <div class="hws"><div class="hwn">04</div><div class="hwi">📊</div><div class="hwt tr" id="hw4">SEGUIMIENTO TOTAL</div><div class="hwd tr" id="hd4">Controla qué coaches respondieron, cuáles están pendientes y cuáles van a entrevista.</div></div>
@@ -505,6 +515,24 @@ document.getElementById('cform').onsubmit=function(e){
   .then(function(r){if(r.ok){document.getElementById('cform').reset();var ok=document.getElementById('fok');ok.style.display='block';setTimeout(function(){ok.style.display='none';},6000);}})
   .catch(function(){alert('Error. Escribe a pitchtocampus@gmail.com');});
 };
-</script>
-</body>
+function openHL(){
+  var m=document.getElementById('hlModal');
+  document.getElementById('hlFrame').src='https://www.youtube.com/embed/wWsih8ymPbI?start=41&autoplay=1';
+  m.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeHL(e){
+  if(e&&e.target!==document.getElementById('hlModal')&&!e.target.classList.contains('hl-close'))return;
+  var m=document.getElementById('hlModal');
+  m.classList.remove('open');
+  document.getElementById('hlFrame').src='';
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeHL({target:document.getElementById('hlModal')});});</script>
+<div class="hl-modal" id="hlModal" onclick="closeHL(event)">
+  <div class="hl-box">
+    <button class="hl-close" onclick="closeHL()">✕</button>
+    <iframe id="hlFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</div> </body>
 </html>
