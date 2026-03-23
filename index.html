@@ -537,4 +537,13 @@ function openHL(){
   document.body.style.overflow='hidden';
 }
 function closeHL(e){
-  if(e&&e.target!
+  if(e&&e.target!==document.getElementById('hlModal')&&!e.target.classList.contains('hl-close'))return;
+  var m=document.getElementById('hlModal');
+  m.classList.remove('open');
+  document.getElementById('hlFrame').src='';
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeHL({target:document.getElementById('hlModal')});});
+</script>
+</body>
+</html>
